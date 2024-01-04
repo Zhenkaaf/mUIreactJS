@@ -1,68 +1,48 @@
-import { Add, Settings } from "@mui/icons-material";
-import { Button, Typography, styled } from "@mui/material";
+import {
+  Box,
+  Stack,
+  ThemeProvider,
+  createTheme,
+  useMediaQuery,
+} from "@mui/material";
+import Feed from "./components/Feed";
+import Rightbar from "./components/Rightbar";
+import Sidebar from "./components/Sidebar";
+import Navbar from "./components/Navbar";
+import Add from "./components/Add";
+import { useState } from "react";
 
 function App() {
-  const BlueButton = styled(Button)(({ theme }) => ({
-    backgroundColor: theme.palette.otherColor.main,
-    color: "#888",
-    margin: 5,
-    "&:hover": {
-      backgroundColor: "lightcoral",
+  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
+  console.log(prefersDarkMode);
+  const [mode, setMode] = useState("light");
+  const darkTheme = createTheme({
+    palette: {
+      mode: mode,
     },
-    "&:disabled": {
-      backgroundColor: "gray",
-      color: "white",
-    },
-  }));
+  });
   return (
-    <div>
-      <Button variant="text">Text</Button>
-      <Button
-        variant="contained"
-        color="secondary"
-        startIcon={<Settings />}
+    <ThemeProvider theme={darkTheme}>
+      <Box
+        bgcolor={"background.default"}
+        color={"text.primary"}
       >
-        Settings
-      </Button>
-      <Button
-        variant="contained"
-        color="success"
-        startIcon={<Add />}
-      >
-        Add new post
-      </Button>
-      <Button
-        variant="outlined"
-        disabled
-        size="small"
-      >
-        Outlined
-      </Button>
-      <Typography
-        variant="h3"
-        component="p"
-      >
-        p tag here! hello from typography
-      </Typography>
-      <Button
-        variant="contained"
-        sx={{
-          backgroundColor: "skyblue",
-          color: "#888",
-          margin: 5,
-          "&:hover": {
-            backgroundColor: "lightcoral",
-          },
-          "&:disabled": {
-            backgroundColor: "gray",
-            color: "white",
-          },
-        }}
-      >
-        My unique button
-      </Button>
-      <BlueButton>Other button</BlueButton>
-    </div>
+        <Navbar />
+        <Stack
+          direction="row"
+          spacing={2}
+          /*   spacing={{ xs: 0, sm: 2 }} */
+        >
+          <Sidebar
+            setMode={setMode}
+            mode={mode}
+          />
+          <Feed />
+          <Rightbar />
+        </Stack>
+        <Add />
+      </Box>
+    </ThemeProvider>
   );
 }
 
